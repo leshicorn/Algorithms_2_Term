@@ -22,6 +22,3 @@ executables_delete:
 	find . -type f -executable -exec rm {} +
 
 delete: all_objs_delete executables_delete
-	rm out.txt
-	
-	

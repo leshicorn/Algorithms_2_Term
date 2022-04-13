@@ -25,11 +25,5 @@ char* sum_str(char* str1, char* str2)
 
 int main()
 {
-    char* str1 = malloc(100);
-    char* str2 = malloc(100);
-
-    scanf("%s", str1);
-    scanf("%s", str2);
-
-    printf("%s\n", sum_str(str1, str2));
+    printf("%d", atoi("0987"));
 }

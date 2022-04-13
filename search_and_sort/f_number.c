@@ -100,7 +100,7 @@ int main()
 
     //FILE* res;
     //res = fopen("out.txt", "w");
-
+    //printf("\n\nResult:\n");
     for (int i = 0; i < amount_of_lines; i++)
     {
         printf("%s", arr[i].str);

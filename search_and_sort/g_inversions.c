@@ -15,36 +15,24 @@ int* copy(int* mas, int s, int f)
     return result;
 }
 
-void print(int* mas, int len)
-{
-    for(int i = 0; i < len; i++)
-    {
-        printf("%d ", mas[i]);
-    }
-    printf("\n");
-    return;
-}
-
 void merge_and_count(int* a, int* b, int len_a, int len_b, int* mas)
 {
-    int liter = 0;
-    int riter = 0;
-    int size = len_a + len_b;
-    int tmp[size];
+    int liter = 0, riter = 0, size = len_a + len_b;
+    int* tmp = malloc(sizeof(int) * size);
 
     for(int i = 0; i < size; i++)
     {
         if(a[liter] <= b[riter])
         {
             tmp[i] = a[liter++];
-            //count += len_b - riter;
         }
         else
         {
             tmp[i] = b[riter++];
             count += len_a - liter;
         }
-        if (liter == len_a){
+        if (liter == len_a)
+        {
             while(riter < len_b)
             {
                 tmp[++i] = b[riter++];
@@ -95,6 +83,5 @@ int main()
     }
     sort_and_count(mas, n);
     printf("%lld\n", count);
-    //print(mas, n);
     return 0;
 }

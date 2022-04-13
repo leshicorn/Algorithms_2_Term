@@ -49,20 +49,18 @@ int comparator(strings* a, strings* b)
     char* str1 = sum_str(a->str, b->str);
     char* str2 = sum_str(b->str, a->str);
 
-    int s1 = atoi(str1);
-    int s2 = atoi(str2);
-
+    int res = strcmp(str1, str2);
     free(str1);
     free(str2);
 
-    return (s1 - s2 < 0) ? 1 : 0;
+    return (res < 0) ? 1 : 0;
 }
 
 void sort_by_first_symbol(strings* arr, int size)
 {
     for (int i = 0; i < size; i++)
     {
-        for (int j = 0; j < size - i - 1; j++)
+        for (int j = 0; j < size - 1; j++)
         {
             if (comparator(&arr[j], &arr[j + 1]) != 0)
             {

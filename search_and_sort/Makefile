@@ -1,6 +1,6 @@
-NAME=f_number
-C=	 f_number.c
-OBJ= f_number.o
+NAME=i_brokers
+C=	 i_brokers.c
+OBJ= i_brokers.o
 CC=gcc
 CFLAGS=-Wall -Wextra
 

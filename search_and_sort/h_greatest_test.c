@@ -90,35 +90,40 @@ int min(int a, int b)
     return b;
 }
 
+void solve(int n, int k)
+{
+    my_heap* hp = create_heap(k + 5);
+    for(int i = 0; i < n; i++)
+    {
+        long long x;
+        scanf("%lld", &x);
+        insert(hp, x);
+        if(hp->sz > k)
+        {
+            erase_min(hp);
+        }
+    }
+    long long* answer = (long long*) malloc(sizeof(long long) * k);
+    int size = 0;
+    while(hp->sz > 0)
+    {
+        answer[size++] = get_min(hp);
+        erase_min(hp);
+    }
+
+    for(int i = size - 1; i >= 0; i--)
+    {
+        printf("%lld\n", answer[i]);
+    }
+
+    delete_heap(hp);
+    free(answer);
+}
+
 int main()
 {
-	int n;
-	scanf("%d", &n);
-	my_heap* myHeap = create_heap(n * 4);
-
-	for(int i = 0; i < n; i++)
-	{
-		long long x;
-		scanf("%lld", &x);
-		insert(myHeap, x);
-	}
-
-	double ans = 0;
-
-	while(myHeap->sz > 1)
-	{
-		long long min1 = get_min(myHeap);
-		erase_min(myHeap);
-
-		long long min2 = get_min(myHeap);
-		erase_min(myHeap);
-        
-		ans += (double)(min1 + min2) * 0.01;
-		insert(myHeap, min1 + min2);
-	}
-
-	printf("%.2f\n", ans);
-
-	delete_heap(myHeap);
-	return 0;
+    int n, k;
+    scanf("%d%d", &n, &k);
+    solve(n, k);
+    return 0;
 }

@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 typedef struct my_heap{
     long long* heap;
     int sz;
 } my_heap;
+
+typedef struct massiv{
+    my_heap* elem;
+} massiv;
 
 my_heap* create_heap(int new_size)
 {
@@ -86,46 +89,73 @@ int min(int a, int b)
 {
     if(a < b)
         return a;
-
     return b;
-}
-
-void solve(int n, int k)
-{
-    my_heap* hp = create_heap(k);
-
-    for(int i = 0; i < n; i++)
-    {
-        long long x;
-        scanf("%lld", &x);
-        insert(hp, x);
-        if(hp->sz > k)
-        {
-            erase_min(hp);
-        }
-    }
-
-    long long* answer = malloc(sizeof(long long) * k);
-    int size = 0;
-    while(hp->sz > 0)
-    {
-        answer[size++] = get_min(hp);
-        erase_min(hp);
-    }
-
-    for(int i = size - 1; i >= 0; i--)
-    {
-        printf("%lld\n", answer[i]);
-    }
-
-    delete_heap(hp);
-    free(answer);
 }
 
 int main()
 {
-    int n, k;
-    scanf("%d%d", &n, &k);
-    solve(n, k);
-    return 0;
+    int n = 0;
+    scanf("%d", &n);
+    massiv* arr = malloc(sizeof(massiv) * n);
+
+    while (1)
+    {
+        int what_to_do = 0;
+        scanf("%d", &what_to_do);
+        switch (what_to_do)
+        {
+            case 0:
+            {
+                int number = 0, size = 0, type = 0;
+                scanf("%d %d %d", &number, &size, &type);
+                arr[number].elem = create_heap(size);
+                //чото с типом
+                break;
+            }
+            case 1:
+            {
+                int number, elem;
+                scanf("%d %d", &number, &elem);
+                insert(arr[number].elem, elem);
+                break;
+            }
+            case 2:
+            {
+                int number;
+                scanf("%d", &number);
+                printf("%lld\n", get_min(arr[number].elem));
+                break;
+            }
+            case 3:
+            {
+                int number;
+                scanf("%d", &number);
+                erase_min(arr[number].elem);
+                break;
+            }
+            case 4:
+            {
+                int number;
+                scanf("%d", &number);
+                printf("%d\n", (arr[number].elem)->sz);
+                break;
+            }
+            case 5:
+            {
+                break;
+            }
+            case 6:
+            {
+                int number;
+                scanf("%d", &number);
+                delete_heap(arr[number].elem);
+                break;
+            }
+            default:
+            {
+                printf("End\n");
+                return 0;
+            }
+        }
+    }
 }

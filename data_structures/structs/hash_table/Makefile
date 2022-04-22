@@ -1,8 +1,8 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -Wpedantic
-NAME=	 fastest_sort
-CNAME=	 fastest_sort.c
-OBJ_NAME=fastest_sort.o
+CFLAGS=-Wall -Wextra -Wpedantic -g -Werror
+NAME=	 hash_new_new
+CNAME=	 hash_new_new.c
+OBJ_NAME=hash_new_new.o
 
 objs:
 		$(CC) $(CFLAGS) -c $(CNAME)

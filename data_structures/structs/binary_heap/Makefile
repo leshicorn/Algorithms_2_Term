@@ -1,17 +1,24 @@
+NAME=bh
+C=	 bh.c
+OBJ= bh.o
 CC=gcc
-CFLAGS=-Wall -Wextra -Wpedantic
-NAME=binary_heap
+CFLAGS=-Wall -Wextra
 
 objs:
-		$(CC) $(CFLAGS) -c binary_heap.c
+	$(CC) -c $(C) ${CFLAGS}
 
 all: objs
-		${CC} ${CFLAGS} binary_heap.o -o $(NAME)
+	$(CC) $(OBJ) ${CFLAGS} -o $(NAME)
 
 clean:
-		rm -f binary_heap.o
+	rm $(OBJ) $(NAME)
 
-fclean: clean
-		rm -f $(NAME)
+re: clean all
 
-re: fclean all
+all_objs_delete:
+	find . -type f -name '*.o' -exec rm {} +
+
+executables_delete:
+	find . -type f -executable -exec rm {} +
+
+delete: all_objs_delete executables_delete

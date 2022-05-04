@@ -134,7 +134,7 @@ void find(node** table, char* key)
         printf("MISSING\n");
         return;
     }
-    else if (ft_strcmp(cur->key, key) == 0)
+    if (ft_strcmp(cur->key, key) == 0)
 	{
 		printf("%s\n", cur->value);
         return;
@@ -161,7 +161,7 @@ void destroy(node** table)
 
 int main()
 {
-    freopen("input.txt", "r", stdin);
+    //freopen("input.txt", "r", stdin);
     // node** table = create_table();
     table_arr* arr = calloc(MAX_AMOUNT_OF_TABLES, sizeof(table_arr));
     int number = 0;
@@ -181,17 +181,17 @@ int main()
             arr[number].table = create_table();
             array[number] = 1;
         }
-        else if (command[0] == 'i')
+        if (command[0] == 'i')
         {
             scanf("%d %s %s", &number, key, value);
             insert(arr[number].table, key, value);
         }
-        else if (command[0] == 'e')
+        if (command[0] == 'e')
         {
             scanf("%d %s", &number, key);
             erase(arr[number].table, key);
         }
-        else if (command[0] == 'f')
+        if (command[0] == 'f')
         {
             scanf("%d %s", &number, key);
             if (array[number] == 0)
@@ -199,7 +199,7 @@ int main()
             else
                 find(arr[number].table, key);
         }
-        else if (command[0] == 'd')
+        if (command[0] == 'd')
         {
             scanf("%d", &number);
             array[number] = 0;

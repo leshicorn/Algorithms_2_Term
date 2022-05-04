@@ -1,161 +1,192 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
-typedef struct my_heap{
-    long long* heap;
-    int sz;
-} my_heap;
-
-typedef struct massiv{
-    my_heap* elem;
-} massiv;
-
-my_heap* create_heap(int new_size)
+typedef struct binary_heap 
 {
-    my_heap* hp = (my_heap*) malloc(sizeof(my_heap));
-    hp->heap = (long long*) malloc(sizeof(long long) * new_size);
-    hp->sz = 0;
-    return hp;
+    int* body;
+    size_t allocated;
+    size_t nodes;
+    int type;
+} bh;
+
+bh* bh_create(size_t maxsize, int type) 
+{
+    bh* heap = malloc(sizeof(bh));
+    heap->body = malloc((maxsize + 1) * sizeof(int));
+    heap->allocated = maxsize;
+    heap->nodes = 0;
+    heap->type = type;
+    return heap;
 }
 
-void delete_heap(my_heap* hp)
+void bh_destroy(bh* heap) 
 {
-    free(hp->heap);
-    hp->heap = NULL;
-    free(hp);
-    hp = NULL;
+    free(heap->body);
+    free(heap);
 }
 
-void swap(long long* a, long long* b)
+void bh_swap(bh* heap, int a, int b) 
 {
-    long long tmp = (*a);
-    (*a) = (*b);
-    (*b) = tmp;
+    int tmp = heap->body[a];
+    heap->body[a] = heap->body[b];
+    heap->body[b] = tmp;
 }
 
-void siftUp(my_heap* hp, int v)
+int bh_get(bh* heap) 
 {
-    while(v > 1 && hp->heap[v / 2] > hp->heap[v])
+    assert(heap->nodes > 0);
+    return heap->body[1];
+}
+
+void bh_siftUp(bh* heap, size_t index) 
+{
+    if (heap->type == 0) 
     {
-        swap(&(hp->heap[v / 2]), &(hp->heap[v]));
-        v /= 2;
+        for (size_t i = index; i > 1 && heap->body[i] < heap->body[i / 2]; i /= 2) 
+        {
+            bh_swap(heap, i, i / 2);
+        }
+    } 
+    else
+    {
+        for (size_t i = index; i > 1 && heap->body[i] > heap->body[i / 2]; i /= 2) 
+        {
+            bh_swap(heap, i, i / 2);
+        }
+        
     }
 }
 
-void siftDown(my_heap* hp, int v)
+void bh_insert(bh* heap, int node) 
 {
-    while(v <= hp->sz)
+    assert(heap->nodes < heap->allocated);
+    heap->body[++heap->nodes] = node;
+    bh_siftUp(heap, heap->nodes);
+}
+
+void bh_siftDown(bh* heap, size_t index) 
+{
+    if (heap->type == 0) 
     {
-        long long minValue = hp->heap[v];
-        int child = v;
-        if(v * 2 <= hp->sz && minValue > hp->heap[v * 2]) // left
-        {
-            minValue = hp->heap[v * 2];
-            child = v * 2;
+        for (;;) {
+            size_t left = index + index;
+            size_t right = left + 1;
+            size_t smallest = index;
+            if (left <= heap->nodes && heap->body[left] < heap->body[index])
+            {
+                smallest = left;
+            }
+            if (right <= heap->nodes && heap->body[right] < heap->body[smallest])
+            {
+                smallest = right;
+            }
+            if (smallest == index)
+            {
+                break;
+            }
+            bh_swap(heap, index, smallest);
+            index = smallest;
         }
-        if(v * 2 + 1 <= hp->sz && minValue > hp->heap[v * 2 + 1]) // right
+    }
+    else 
+    {
+        for (;;) 
         {
-            minValue = hp->heap[v * 2 + 1];
-            child = v * 2 + 1;
+            size_t left = index + index;
+            size_t right = left + 1;
+            size_t smallest = index;
+            if (left <= heap->nodes && heap->body[left] > heap->body[index])
+            {
+                smallest = left;
+            }
+            if (right <= heap->nodes && heap->body[right] > heap->body[smallest])
+            {
+                smallest = right;
+            }
+            if (smallest == index)
+            {
+                break;
+            }
+            bh_swap(heap, index, smallest);
+            index = smallest;
         }
-        if(child == v)
-            break;
-        swap(&(hp->heap[v]), &(hp->heap[child]));
-        v = child;
     }
 }
 
-void insert(my_heap* hp, long long value)
+void bh_remove(bh* heap) 
 {
-    hp->sz++;
-    hp->heap[hp->sz] = value;
-    siftUp(hp, hp->sz);
+    assert(heap->nodes > 0);
+    heap->body[1] = heap->body[heap->nodes];
+    heap->nodes--;
+    bh_siftDown(heap, 1);
 }
 
-long long get_min(my_heap* hp)
+void bh_merge(bh* heap, bh* tmp) 
 {
-    long long ans = hp->heap[1];
-    return ans;
+    for (int i = 1; i <= (int)tmp->nodes; i++) 
+    {
+        bh_insert(heap, tmp->body[i]);
+    }
+    tmp->nodes = 0;
 }
 
-void erase_min(my_heap* hp)
-{
-    swap(&(hp->heap[1]), &(hp->heap[hp->sz]));
-    hp->sz--;
-    siftDown(hp, 1);
-}
-
-int min(int a, int b)
-{
-    if(a < b)
-        return a;
-    return b;
-}
-
-int main()
+int main() 
 {
     int n = 0;
     scanf("%d", &n);
-    massiv* arr = malloc(sizeof(massiv) * n);
-
-    while (1)
+    bh** heap = malloc(n * sizeof(bh));
+    char flag = 0;
+    int index = 0, type = 0, elem = 0;
+    size_t size = 0;
+    while ((flag = getchar()) != -1) 
     {
-        int what_to_do = 0;
-        scanf("%d", &what_to_do);
-        switch (what_to_do)
+        switch (flag) 
         {
-            case 0:
+            case '0':
             {
-                int number = 0, size = 0, type = 0;
-                scanf("%d %d %d", &number, &size, &type);
-                arr[number].elem = create_heap(size);
-                //чото с типом
+                scanf("%d%ld%d", &index ,&size, &type);
+                heap[index] = bh_create(size, type);
                 break;
             }
-            case 1:
+            case '1':
             {
-                int number, elem;
-                scanf("%d %d", &number, &elem);
-                insert(arr[number].elem, elem);
+                scanf("%d%d", &index, &elem);
+                bh_insert(heap[index], elem);
                 break;
             }
-            case 2:
+            case '2':
             {
-                int number;
-                scanf("%d", &number);
-                printf("%lld\n", get_min(arr[number].elem));
+                scanf("%d", &index);
+                printf("%d\n", bh_get(heap[index]));
                 break;
             }
-            case 3:
+            case '3':
             {
-                int number;
-                scanf("%d", &number);
-                erase_min(arr[number].elem);
+                scanf("%d", &index);
+                bh_remove(heap[index]);
                 break;
             }
-            case 4:
+            case '4':
             {
-                int number;
-                scanf("%d", &number);
-                printf("%d\n", (arr[number].elem)->sz);
+                scanf("%d", &index);
+                printf("%ld\n", heap[index]->nodes);
                 break;
             }
-            case 5:
+            case '5':
             {
+                scanf("%d%d", &index, &elem);
+                bh_merge(heap[index], heap[elem]);
                 break;
             }
-            case 6:
+            case '6':
             {
-                int number;
-                scanf("%d", &number);
-                delete_heap(arr[number].elem);
+                scanf("%d", &index);
+                bh_destroy(heap[index]);
                 break;
-            }
-            default:
-            {
-                printf("End\n");
-                return 0;
             }
         }
     }
+    free(heap);
+    return 0;
 }

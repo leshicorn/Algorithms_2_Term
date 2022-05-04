@@ -1,8 +1,8 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -Wpedantic -g
-NAME=	 a_new
-CNAME=	 a_new.c
-OBJ_NAME=a_new.o
+NAME=	 h_swap
+CNAME=	 h_swap.c
+OBJ_NAME=h_swap.o
 
 objs:
 		$(CC) $(CFLAGS) -c $(CNAME)

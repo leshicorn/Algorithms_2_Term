@@ -1,8 +1,8 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -Wpedantic -g -Werror
-NAME=	 hash_new_new
-CNAME=	 hash_new_new.c
-OBJ_NAME=hash_new_new.o
+CFLAGS=-Wall -Wextra -Wpedantic -g
+NAME=	 hash_t
+CNAME=	 hash_t.c
+OBJ_NAME=hash_t.o
 
 objs:
 		$(CC) $(CFLAGS) -c $(CNAME)

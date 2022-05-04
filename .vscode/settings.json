@@ -12,6 +12,21 @@
         "system_error": "c",
         "thread": "c",
         "typeindex": "c",
-        "variant": "c"
+        "variant": "c",
+        "*.tcc": "c",
+        "unordered_map": "c",
+        "unordered_set": "c",
+        "functional": "c",
+        "ratio": "c",
+        "streambuf": "c",
+        "any": "c",
+        "chrono": "c",
+        "istream": "c",
+        "memory_resource": "c",
+        "ostream": "c",
+        "scoped_allocator": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c"
     }
 }
